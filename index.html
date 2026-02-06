@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Essence Noir • Lüks Erkek Parfüm Koleksiyonu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --card: #0a0a0a;
+      --gold: #c9a96e;
+      --gold-glow: #e8c97c;
+      --text: #e0e0e0;
+      --text-light: #a0a0a0;
+      --border: #222222;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .sidebar {
+      position: fixed; left: -280px; top: 0; width: 280px; height: 100%;
+      background: linear-gradient(180deg, #111 0%, #000 100%);
+      border-right: 1px solid var(--border);
+      transition: left 0.4s cubic-bezier(0.4,0,0.2,1);
+      z-index: 1000; overflow-y: auto;
+    }
+    .sidebar.open { left: 0; }
+    .sidebar-header {
+      padding: 30px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sidebar-header h2 {
+      font-family: 'Playfair Display', serif; font-size: 2.1rem;
+      color: var(--gold-glow); letter-spacing: 4px; text-transform: uppercase;
+    }
+    .sidebar-close { background:none; border:none; color:var(--text); font-size:2rem; cursor:pointer; }
+    .sidebar-nav a {
+      display:block; padding:14px 24px; color:var(--text-light);
+      text-decoration:none; font-weight:500; transition:all 0.2s;
+      cursor: pointer;
+    }
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      background:rgba(201,169,110,0.08); color:var(--gold); padding-left:32px;
+    }
+    .overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.85);
+      opacity:0; visibility:hidden; transition:all 0.4s; z-index:900;
+    }
+    .overlay.show { opacity:1; visibility:visible; }
+    header {
+      position:fixed; top:0; left:0; right:0; height:80px;
+      background:rgba(0,0,0,0.92); backdrop-filter:blur(15px);
+      border-bottom:1px solid var(--border); z-index:800;
+      display:flex; align-items:center; padding:0 30px;
+    }
+    .menu-btn {
+      background:none; border:none; color:var(--gold);
+      font-size:2rem; cursor:pointer; padding:10px;
+    }
+    .logo-text {
+      font-family:'Playfair Display',serif; font-size:2rem;
+      color:var(--gold-glow); letter-spacing:5px; text-transform:uppercase;
+      margin-left:20px;
+    }
+    .hero {
+      height:100vh; min-height:720px;
+      background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.90)),
+                  url('https://fimgs.net/himg/o.0lPQceAUq70.jpg') center/cover no-repeat;
+      display:flex; align-items:center; justify-content:center;
+      text-align:center; padding:0 20px;
+    }
+    .hero-content h1 {
+      font-family:'Playfair Display',serif; font-size:clamp(3.2rem,8vw,7.5rem);
+      margin-bottom:16px; color:var(--gold);
+      text-shadow:0 8px 50px rgba(0,0,0,0.95);
+    }
+    .hero-content p {
+      font-size:1.35rem; max-width:640px; margin:0 auto 32px;
+      color:var(--text-light); text-shadow:0 2px 10px rgba(0,0,0,0.8);
+    }
+    .btn {
+      display:inline-block; padding:14px 40px; background:transparent;
+      color:var(--gold); border:1px solid var(--gold); border-radius:50px;
+      font-weight:600; font-size:1.1rem; transition:all 0.3s;
+      text-decoration:none;
+    }
+    .btn:hover {
+      background:var(--gold); color:#000;
+      box-shadow:0 10px 30px rgba(201,169,110,0.4);
+    }
+    .section { padding:120px 24px; max-width:1400px; margin:0 auto; }
+    .section-title {
+      font-family:'Playfair Display',serif; font-size:3.2rem;
+      text-align:center; margin-bottom:80px; color:var(--gold-glow);
+    }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:32px; }
+    .card {
+      background:var(--card); border-radius:16px; overflow:hidden;
+      border:1px solid var(--border); transition:all 0.35s ease;
+    }
+    .card:hover { transform:translateY(-12px); border-color:var(--gold); box-shadow:0 25px 60px rgba(0,0,0,0.6); }
+    .card img {
+      width:100%;
+      height:420px;
+      object-fit:contain;
+      background: transparent;
+      padding: 40px 20px;
+    }
+    .card-info { padding:24px; text-align:center; }
+    .card-title { font-size:1.45rem; margin-bottom:8px; font-weight:600; }
+    .card-subtitle { color:var(--gold); font-size:0.95rem; margin-bottom:12px; }
+    .card-price {
+      font-size:1.3rem; font-weight:700; color:var(--gold-glow);
+    }
+    .old-price {
+      text-decoration: line-through;
+      color: var(--text-light);
+      font-size: 1rem;
+      margin-right: 10px;
+    }
+    .discount-badge {
+      background: #e74c3c;
+      color: white;
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 12px;
+      margin-left: 10px;
+    }
+    footer {
+      background:#000; padding:100px 24px 60px; text-align:center;
+      border-top:1px solid var(--border);
+    }
+    .footer-content {
+      max-width: 1200px; margin: 0 auto;
+    }
+    .footer-logo {
+      font-family:'Playfair Display',serif; font-size:2.5rem;
+      color:var(--gold-glow); letter-spacing:6px; margin-bottom:20px;
+      text-transform:uppercase;
+    }
+    .contact-info {
+      margin: 30px 0;
+      font-size: 1.1rem;
+      color: var(--text-light);
+    }
+    .contact-info p {
+      margin: 12px 0;
+    }
+    .contact-info strong {
+      color: var(--gold);
+    }
+    .order-note {
+      margin: 25px 0 35px;
+      font-size: 1.15rem;
+      color: var(--gold);
+      font-weight: 500;
+    }
+    .social-links {
+      margin: 40px 0;
+    }
+    .social-links a {
+      color: var(--gold);
+      margin: 0 25px;
+      font-size: 1.3rem;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+    }
+    .social-links a img {
+      width: 36px;
+      height: 36px;
+      margin-right: 12px;
+      transition: all 0.3s;
+      border-radius: 8px;
+    }
+    .social-links a:hover {
+      color: var(--gold-glow);
+      transform: translateY(-4px);
+    }
+    .social-links a:hover img {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 8px rgba(201,169,110,0.6));
+    }
+    .copyright {
+      margin-top: 40px; font-size: 0.95rem; color: var(--text-light);
+    }
+    @media (max-width:768px) {
+      .hero-content h1 { font-size:4.5rem; }
+      .section { padding:80px 16px; }
+      footer { padding:80px 16px 40px; }
+      .order-note { font-size: 1rem; }
+      .social-links a { margin: 15px; font-size:1.1rem; }
+      .social-links a img { width:30px; height:30px; }
+      .card img { padding: 30px 15px; height: 380px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Essence Noir</h2>
+      <button class="sidebar-close" id="closeMenu">×</button>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#home" class="active">Ana Sayfa</a>
+      <a href="#erkek">Erkek Parfümler</a>
+      <a href="#iletisim">İletişim</a>
+    </nav>
+  </div>
+  <div class="overlay" id="overlay"></div>
+  <header>
+    <button class="menu-btn" id="menuBtn">≡</button>
+    <span class="logo-text">Essence Noir</span>
+  </header>
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>Essence Noir</h1>
+      <p>Lüksün karanlık yüzü. Erkekler için seçkin kokular, her damla bir güç.</p>
+      <a href="#erkek" class="btn">Koleksiyonu Keşfet</a>
+    </div>
+  </section>
+  <section class="section" id="erkek">
+    <h2 class="section-title">Seçilmiş Erkek Koleksiyonu</h2>
+    <div class="grid">
+      <!-- Dior Sauvage (önceki yeni fotoğrafın kaldı) -->
+      <div class="card">
+        <img src="https://i.imgur.com/cazmhyK.jpg"
+             alt="Dior Sauvage Eau de Parfum"
+             onerror="this.src='https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'; this.classList.add('error');">
+        <div class="card-info">
+          <div class="card-title">Dior Sauvage</div>
+          <div class="card-subtitle">Erkek • 100 ml</div>
+          <div class="card-price">
+            <span class="old-price">700 ₺</span>
+            <span style="color: var(--gold-glow); font-size: 1.5rem;">499 ₺</span>
+            <span class="discount-badge">%29 İndirim</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Versace Eros - yeni fotoğraf -->
+      <div class="card">
+        <img src="https://i.imgur.com/0Any0iH.jpg"
+             alt="Versace Eros Eau de Toilette"
+             onerror="this.src='https://images.unsplash.com/photo-1590736969783-55c8709b4450?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'; this.classList.add('error');">
+        <div class="card-info">
+          <div class="card-title">Versace Eros</div>
+          <div class="card-subtitle">Erkek • 100 ml</div>
+          <div class="card-price">
+            <span class="old-price">700 ₺</span>
+            <span style="color: var(--gold-glow); font-size: 1.5rem;">499 ₺</span>
+            <span class="discount-badge">%29 İndirim</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emporio Armani Stronger With You Intensely (önceki yeni fotoğrafın kaldı) -->
+      <div class="card">
+        <img src="https://i.imgur.com/8DnTyb7.jpg"
+             alt="Emporio Armani Stronger With You Intensely"
+             onerror="this.src='https://images.unsplash.com/photo-1590736969853-5c6e8e6f9b0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'; this.classList.add('error');">
+        <div class="card-info">
+          <div class="card-title">Emporio Armani Stronger With You Intensely</div>
+          <div class="card-subtitle">Erkek • 100 ml</div>
+          <div class="card-price">
+            <span class="old-price">700 ₺</span>
+            <span style="color: var(--gold-glow); font-size: 1.5rem;">499 ₺</span>
+            <span class="discount-badge">%29 İndirim</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Versace Eros Flame - yeni fotoğraf -->
+      <div class="card">
+        <img src="https://i.imgur.com/V3jsdbG.jpg"
+             alt="Versace Eros Flame"
+             onerror="this.src='https://images.unsplash.com/photo-1590736969954-6444b6c43425?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'; this.classList.add('error');">
+        <div class="card-info">
+          <div class="card-title">Versace Eros Flame</div>
+          <div class="card-subtitle">Erkek • 100 ml</div>
+          <div class="card-price">
+            <span class="old-price">700 ₺</span>
+            <span style="color: var(--gold-glow); font-size: 1.5rem;">499 ₺</span>
+            <span class="discount-badge">%29 İndirim</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="iletisim">
+    <div class="footer-content">
+      <div class="footer-logo">Essence Noir</div>
+      <div class="contact-info">
+        <p><strong>Adres:</strong> Çatalca, İstanbul, Türkiye</p>
+        <p><strong>Telefon:</strong> 0543 460 26 75</p>
+        <p><strong>E-posta:</strong> <a href="mailto:essencenoiroffical@gmail.com" style="color: var(--gold); text-decoration: none;">essencenoiroffical@gmail.com</a></p>
+      </div>
+      <div class="order-note">
+        Siparişlerinizi WhatsApp veya Instagram üzerinden oluşturabilirsiniz 📩✨
+      </div>
+      <div class="social-links">
+        <a href="https://www.instagram.com/essencenoirofficaltr01/" target="_blank" rel="noopener noreferrer">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/600px-Instagram_icon.png" alt="Instagram">
+          Instagram
+        </a>
+        <a href="https://wa.me/905434602675" target="_blank" rel="noopener noreferrer">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/600px-WhatsApp.svg.png" alt="WhatsApp">
+          WhatsApp
+        </a>
+        <a href="mailto:essencenoiroffical@gmail.com">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Gmail_icon_%282020%29.svg/600px-Gmail_icon_%282020%29.svg.png" alt="E-posta">
+          E-posta
+        </a>
+      </div>
+      <div class="copyright">
+        © 2026 Essence Noir • Tüm hakları saklıdır.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const closeBtn = document.getElementById('closeMenu');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const navLinks = document.querySelectorAll('.sidebar-nav a');
+    function openMenu() {
+      sidebar.classList.add('open');
+      overlay.classList.add('show');
+    }
+    function closeMenu() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('show');
+    }
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        navLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+        closeMenu();
+        const targetId = this.getAttribute('href');
+        if (targetId === '#home') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+    document.querySelectorAll('.card img').forEach(img => {
+      img.onerror = function() {
+        this.src = 'https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+        this.classList.add('error');
+      };
+    });
+    menuBtn.addEventListener('click', openMenu);
+    closeBtn.addEventListener('click', closeMenu);
+    overlay.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeMenu();
+    });
+  </script>
+</body>
+</html>
