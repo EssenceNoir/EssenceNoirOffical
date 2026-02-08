@@ -20,6 +20,17 @@
       --danger: #e74c3c;
       --love: #e91e63;
     }
+    
+    [data-theme="light"] {
+      --bg: #f5f5f5;
+      --card: #ffffff;
+      --gold: #b8941d;
+      --gold-glow: #d4a84b;
+      --text: #1a1a1a;
+      --text-light: #666666;
+      --border: #e0e0e0;
+    }
+    
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       background: var(--bg);
@@ -27,8 +38,209 @@
       font-family: 'Inter', system-ui, sans-serif;
       line-height: 1.6;
       min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
     }
-    .promo-banner {
+
+    /* Loading Animation */
+    .loading-screen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    .loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .loading-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      color: var(--gold);
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards;
+    }
+    .loading-tagline {
+      color: var(--text-light);
+      font-size: 1rem;
+      letter-spacing: 4px;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.3s forwards;
+    }
+    .loading-bar {
+      width: 200px;
+      height: 2px;
+      background: rgba(201,169,110,0.2);
+      margin-top: 40px;
+      border-radius: 2px;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn 0.5s ease 0.5s forwards;
+    }
+    .loading-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-glow));
+      width: 0%;
+      animation: loadingProgress 2s ease-in-out 0.5s forwards;
+    }
+    .loading-particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0;
+      animation: particleFloat 3s ease-in-out infinite;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes loadingProgress {
+      0% { width: 0%; }
+      50% { width: 60%; }
+      100% { width: 100%; }
+    }
+    @keyframes particleFloat {
+      0%, 100% { opacity: 0; transform: translateY(100vh) scale(0); }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.8; }
+      100% { opacity: 0; transform: translateY(-100px) scale(1); }
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .theme-toggle:hover {
+      background: var(--gold);
+      color: var(--bg);
+      transform: scale(1.1);
+    }
+
+    /* Welcome Discount Modal */
+    .welcome-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 5000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s;
+    }
+    .welcome-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .welcome-content {
+      background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+      border: 2px solid var(--gold);
+      border-radius: 24px;
+      padding: 50px;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+      transform: scale(0.9);
+      transition: transform 0.4s;
+      box-shadow: 0 25px 80px rgba(201,169,110,0.3);
+    }
+    .welcome-modal.show .welcome-content {
+      transform: scale(1);
+    }
+    .welcome-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: var(--text-light);
+      font-size: 2rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .welcome-close:hover {
+      color: var(--gold);
+    }
+    .welcome-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+    .welcome-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: var(--gold-glow);
+      margin-bottom: 15px;
+    }
+    .welcome-text {
+      color: var(--text-light);
+      margin-bottom: 25px;
+      font-size: 1.1rem;
+    }
+    .welcome-code {
+      background: linear-gradient(90deg, var(--gold), var(--gold-glow));
+      color: #000;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      display: inline-block;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .welcome-code:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(201,169,110,0.4);
+    }
+    .welcome-code.copied {
+      background: var(--success);
+      color: white;
+    }
+    .welcome-note {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    /* Countdown Timer */
+    .countdown-banner {
       position: fixed;
       top: 80px;
       left: 0;
@@ -43,17 +255,18 @@
       animation: slideDown 0.5s ease;
       box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
     }
-    .promo-banner::before {
-      content: "💝";
-      margin-right: 8px;
+    .countdown-timer {
+      display: inline-flex;
+      gap: 10px;
+      margin-left: 15px;
+      align-items: center;
     }
-    .promo-banner::after {
-      content: "💝";
-      margin-left: 8px;
-    }
-    @keyframes slideDown {
-      from { transform: translateY(-100%); }
-      to { transform: translateY(0); }
+    .countdown-item {
+      background: rgba(255,255,255,0.2);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      min-width: 40px;
     }
     .promo-code {
       background: rgba(255,255,255,0.2);
@@ -62,12 +275,21 @@
       font-weight: 700;
       margin-left: 10px;
     }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(0); }
+    }
+
     .sidebar {
       position: fixed; left: -320px; top: 0; width: 320px; height: 100%;
       background: linear-gradient(180deg, #111 0%, #000 100%);
       border-right: 1px solid var(--border);
       transition: left 0.4s cubic-bezier(0.4,0,0.2,1);
       z-index: 1000; overflow-y: auto;
+    }
+    [data-theme="light"] .sidebar {
+      background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
+      border-right: 1px solid var(--border);
     }
     .sidebar.open { left: 0; }
     .sidebar-header {
@@ -99,6 +321,10 @@
       border-bottom:1px solid var(--border); z-index:800;
       display:flex; align-items:center; padding:0 30px;
       justify-content: space-between;
+      transition: background 0.3s;
+    }
+    [data-theme="light"] header {
+      background: rgba(255,255,255,0.95);
     }
     .header-left {
       display: flex;
@@ -158,6 +384,9 @@
       z-index: 1000;
       display: flex;
       flex-direction: column;
+    }
+    [data-theme="light"] .cart-sidebar {
+      background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
     }
     .cart-sidebar.open { right: 0; }
     .cart-header {
@@ -275,6 +504,44 @@
       border-top: 1px solid var(--border);
       background: var(--card);
     }
+    .cart-discount {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .discount-input {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    .discount-input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    .discount-btn {
+      padding: 12px 20px;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .discount-btn:hover {
+      background: var(--gold-glow);
+    }
+    .cart-discount-info {
+      display: flex;
+      justify-content: space-between;
+      color: var(--success);
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
     .cart-total {
       display: flex;
       justify-content: space-between;
@@ -358,6 +625,34 @@
       font-size: 0.85rem;
       font-weight: 700;
       z-index: 10;
+    }
+    .favorite-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .favorite-btn:hover {
+      background: rgba(233,30,99,0.2);
+      border-color: var(--love);
+      color: var(--love);
+    }
+    .favorite-btn.active {
+      background: var(--love);
+      border-color: var(--love);
+      color: white;
     }
     .card img {
       width:100%;
@@ -624,8 +919,90 @@
       color: var(--gold);
       background: rgba(201,169,110,0.1);
     }
+
+    /* Reviews Section */
+    .reviews-section {
+      background: var(--card);
+      padding: 80px 24px;
+      margin-top: 60px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .review-card {
+      background: var(--bg);
+      border-radius: 16px;
+      padding: 30px;
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    .review-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-5px);
+    }
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .review-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-glow));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #000;
+      font-size: 1.2rem;
+    }
+    .review-info {
+      flex: 1;
+    }
+    .review-name {
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .review-date {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+    .review-rating {
+      color: #ffc107;
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+    .review-text {
+      color: var(--text-light);
+      line-height: 1.7;
+      font-style: italic;
+    }
+    .review-product {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: var(--gold);
+    }
+
+    /* Favorites Section */
+    .favorites-section {
+      display: none;
+    }
+    .favorites-section.show {
+      display: block;
+    }
+
     footer {
-      background:#000; padding:100px 24px 60px; text-align:center;
+      background:var(--bg); padding:100px 24px 60px; text-align:center;
       border-top:1px solid var(--border);
     }
     .footer-content {
@@ -722,9 +1099,11 @@
       background: var(--gold-glow);
     }
     @media (max-width:768px) {
-      .promo-banner { font-size: 0.8rem; padding: 10px; }
+      .countdown-banner { font-size: 0.75rem; padding: 10px; }
+      .countdown-timer { margin-left: 5px; gap: 5px; }
+      .countdown-item { padding: 3px 6px; min-width: 30px; font-size: 0.8rem; }
       .promo-code { display: block; margin-top: 5px; margin-left: 0; }
-      .hero { margin-top: 140px; }
+      .hero { margin-top: 150px; }
       .hero-content h1 { font-size:4.5rem; }
       .section { padding:80px 16px; }
       footer { padding:80px 16px 40px; }
@@ -739,13 +1118,47 @@
       .filters { gap: 10px; }
       .filter-btn { padding: 8px 16px; font-size: 0.9rem; }
       .newsletter-form { flex-direction: column; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .welcome-content { padding: 30px 20px; margin: 20px; }
+      .welcome-title { font-size: 1.6rem; }
+      .loading-logo { font-size: 2.5rem; }
+      .theme-toggle { bottom: 20px; right: 20px; width: 45px; height: 45px; }
     }
   </style>
 </head>
 <body>
-  <!-- Promo Banner -->
-  <div class="promo-banner">
-    💝 Sevgililer Gününe Özel %29 İndirim! <span class="promo-code">SEVGİLİ29</span> 💝
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-particles" id="particles"></div>
+    <div class="loading-logo">Essence Noir</div>
+    <div class="loading-tagline">Lüksün Karanlık Yüzü</div>
+    <div class="loading-bar">
+      <div class="loading-progress"></div>
+    </div>
+  </div>
+
+  <!-- Welcome Discount Modal -->
+  <div class="welcome-modal" id="welcomeModal">
+    <div class="welcome-content">
+      <button class="welcome-close" onclick="closeWelcomeModal()">×</button>
+      <div class="welcome-icon">🎁</div>
+      <h2 class="welcome-title">Hoş Geldiniz!</h2>
+      <p class="welcome-text">İlk alışverişinize özel 20 TL indirim sizi bekliyor. Kodu kopyalayın ve hemen kullanın!</p>
+      <div class="welcome-code" id="welcomeCode" onclick="copyWelcomeCode()">HOŞGELDİN20</div>
+      <p class="welcome-note">Kodu sepet sayfasında uygulayabilirsiniz</p>
+    </div>
+  </div>
+
+  <!-- Countdown Banner -->
+  <div class="countdown-banner">
+    💝 Sevgililer Gününe Özel 20 TL İndirim! 
+    <span class="countdown-timer" id="countdown">
+      <span class="countdown-item" id="days">00</span>:
+      <span class="countdown-item" id="hours">00</span>:
+      <span class="countdown-item" id="minutes">00</span>:
+      <span class="countdown-item" id="seconds">00</span>
+    </span>
+    <span class="promo-code">SEVGİLİ20</span>
   </div>
 
   <!-- Sidebar Menu -->
@@ -757,6 +1170,7 @@
     <nav class="sidebar-nav">
       <a href="#home" class="active">Ana Sayfa</a>
       <a href="#erkek">Erkek Parfümler</a>
+      <a href="#favorites" onclick="showFavorites()">Favorilerim ❤️</a>
       <a href="#iletisim">İletişim</a>
     </nav>
   </div>
@@ -775,6 +1189,14 @@
       </div>
     </div>
     <div class="cart-footer">
+      <div class="cart-discount">
+        <input type="text" class="discount-input" id="discountInput" placeholder="İndirim kodu">
+        <button class="discount-btn" onclick="applyDiscount()">Uygula</button>
+      </div>
+      <div class="cart-discount-info" id="discountInfo" style="display: none;">
+        <span>İndirim:</span>
+        <span id="discountAmount">-0 ₺</span>
+      </div>
       <div class="cart-total">
         <span>Toplam:</span>
         <span class="cart-total-value" id="cartTotal">0 ₺</span>
@@ -810,6 +1232,11 @@
     <span>✓</span>
     <span id="toastMessage">Ürün sepete eklendi!</span>
   </div>
+
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+    <span id="themeIcon">🌙</span>
+  </button>
 
   <div class="overlay" id="overlay"></div>
   
@@ -850,6 +1277,98 @@
 
     <div class="grid" id="productGrid">
       <!-- Products will be dynamically inserted here -->
+    </div>
+  </section>
+
+  <!-- Favorites Section -->
+  <section class="section favorites-section" id="favoritesSection">
+    <h2 class="section-title">Favorilerim ❤️</h2>
+    <div class="grid" id="favoritesGrid">
+      <!-- Favorites will be dynamically inserted here -->
+    </div>
+    <div id="noFavorites" style="text-align: center; padding: 60px 20px; color: var(--text-light);">
+      <div style="font-size: 4rem; margin-bottom: 20px;">💔</div>
+      <p>Henüz favori ürününüz yok</p>
+      <p style="font-size: 0.9rem; margin-top: 10px;">Beğendiğiniz ürünleri kalp ikonuna tıklayarak kaydedin!</p>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="reviews-section" id="reviews">
+    <h2 class="section-title">Müşteri Yorumları ⭐</h2>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">AK</div>
+          <div class="review-info">
+            <div class="review-name">Ahmet K.</div>
+            <div class="review-date">2 gün önce</div>
+          </div>
+        </div>
+        <div class="review-rating">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">"Dior Sauvage sipariş verdim, ürün orijinal ve çok hızlı kargolandı. Kokusu mükemmel, kalıcılığı harika. Kesinlikle tekrar alışveriş yapacağım!"</p>
+        <div class="review-product">🛍️ Dior Sauvage</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">MY</div>
+          <div class="review-info">
+            <div class="review-name">Mehmet Y.</div>
+            <div class="review-date">1 hafta önce</div>
+          </div>
+        </div>
+        <div class="review-rating">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">"Versace Eros aldım, fiyat performans açısından çok iyi. Paketleme çok özenliydi, hediye gibi geldi. Teşekkürler Essence Noir!"</p>
+        <div class="review-product">🛍️ Versace Eros</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">CB</div>
+          <div class="review-info">
+            <div class="review-name">Can B.</div>
+            <div class="review-date">2 hafta önce</div>
+          </div>
+        </div>
+        <div class="review-rating">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">"Le Male Elixir mükemmel bir koku! 20 TL indirim kodunu kullandım, çok uygun fiyata aldım. WhatsApp üzerinden sipariş vermek çok kolaydı."</p>
+        <div class="review-product">🛍️ JEAN PAUL GAULTIER LE MALE ELIXIR</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">EO</div>
+          <div class="review-info">
+            <div class="review-name">Emre O.</div>
+            <div class="review-date">3 hafta önce</div>
+          </div>
+        </div>
+        <div class="review-rating">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">"Memo African Leather aldım, çok özel ve kaliteli bir koku. Egzotik notalar tam benlik. Kargo çok hızlı geldi, teşekkürler!"</p>
+        <div class="review-product">🛍️ MEMO AFRICAN LEATHER</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">KS</div>
+          <div class="review-info">
+            <div class="review-name">Kerem S.</div>
+            <div class="review-date">1 ay önce</div>
+          </div>
+        </div>
+        <div class="review-rating">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">"Eros Flame harika bir koku! Odunsu ve ateşli notalar çok başarılı. Fiyatlar çok uygun, orijinal ürün garantisi de çok önemli."</p>
+        <div class="review-product">🛍️ Versace Eros Flame</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">BA</div>
+          <div class="review-info">
+            <div class="review-name">Burak A.</div>
+            <div class="review-date">1 ay önce</div>
+          </div>
+        </div>
+        <div class="review-rating">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">"Stronger With You Intensely çok kalıcı ve etkileyici bir koku. 20 TL indirim kodunu kullandım, çok memnun kaldım!"</p>
+        <div class="review-product">🛍️ Emporio Armani Stronger With You Intensely</div>
+      </div>
     </div>
   </section>
 
@@ -902,7 +1421,7 @@
         price: 499,
         oldPrice: 700,
         discount: 29,
-        image: "https://i.imgur.com/cazmhyK.jpg",
+        image: "https://i.imgur.com/EBWLzwQ.png",
         category: "fresh",
         description: "Sauvage, ferah ve odunsu notalarla çöl gün batımının serinliğini taşıyan modern bir klasik. Bergamot, Sichuan biberi ve amberwood'un eşsiz uyumu.",
         notes: ["Bergamot", "Lavanta", "Sichuan Biberi", "Ambroxan"]
@@ -950,7 +1469,7 @@
         price: 499,
         oldPrice: 700,
         discount: 29,
-        image: "https://i.ibb.co/4RF16WBL/Le-Male-Elixir-De-Jean-Paul-Gaultier-125ml-scaled-removebg-preview.png ",
+        image: "https://i.ibb.co/4RF16WBL/Le-Male-Elixir-De-Jean-Paul-Gaultier-125ml-scaled-removebg-preview.png",
         category: "oriental",
         description: "Jean Paul Gaultier'in ikonik Le Male serisinin en yoğun ve karizmatik versiyonu. Lavanta, vanilya ve odunsu notalarla büyüleyici bir koku.",
         notes: ["Lavanta", "Vanilya", "Sandal Ağacı", "Tonka Fasulyesi"]
@@ -971,6 +1490,9 @@
 
     // Cart State
     let cart = JSON.parse(localStorage.getItem('essenceNoirCart')) || [];
+    let favorites = JSON.parse(localStorage.getItem('essenceNoirFavorites')) || [];
+    let appliedDiscount = JSON.parse(localStorage.getItem('essenceNoirDiscount')) || null;
+    let currentTheme = localStorage.getItem('essenceNoirTheme') || 'dark';
 
     // DOM Elements
     const menuBtn = document.getElementById('menuBtn');
@@ -990,21 +1512,188 @@
     const productModal = document.getElementById('productModal');
     const closeModal = document.getElementById('closeModal');
     const toast = document.getElementById('toast');
+    const loadingScreen = document.getElementById('loadingScreen');
+    const welcomeModal = document.getElementById('welcomeModal');
 
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
+      // Create particles
+      createParticles();
+      
+      // Set theme
+      applyTheme(currentTheme);
+      
+      // Hide loading screen after animation
+      setTimeout(() => {
+        loadingScreen.classList.add('hidden');
+        
+        // Show welcome modal if first visit
+        if (!localStorage.getItem('essenceNoirVisited')) {
+          setTimeout(() => {
+            welcomeModal.classList.add('show');
+            localStorage.setItem('essenceNoirVisited', 'true');
+          }, 500);
+        }
+      }, 2500);
+      
       renderProducts(products);
       updateCart();
+      startCountdown();
     });
+
+    // Create loading particles
+    function createParticles() {
+      const container = document.getElementById('particles');
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 3 + 's';
+        particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+        container.appendChild(particle);
+      }
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(currentTheme);
+      localStorage.setItem('essenceNoirTheme', currentTheme);
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('themeIcon').textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+
+    // Welcome Modal
+    function closeWelcomeModal() {
+      welcomeModal.classList.remove('show');
+    }
+
+    function copyWelcomeCode() {
+      const code = 'HOŞGELDİN20';
+      navigator.clipboard.writeText(code).then(() => {
+        const codeEl = document.getElementById('welcomeCode');
+        codeEl.classList.add('copied');
+        codeEl.textContent = 'Kopyalandı! ✓';
+        setTimeout(() => {
+          codeEl.classList.remove('copied');
+          codeEl.textContent = code;
+        }, 2000);
+      });
+    }
+
+    // Countdown Timer
+    function startCountdown() {
+      // Set target to February 15, 2026
+      const targetDate = new Date('2026-02-15T23:59:59').getTime();
+      
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+        
+        if (distance < 0) {
+          document.getElementById('countdown').innerHTML = '<span class="countdown-item">Süre Doldu</span>';
+          return;
+        }
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        document.getElementById('days').textContent = String(days).padStart(2, '0');
+        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+      }
+      
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
 
     // Render Products
     function renderProducts(productsToRender) {
       productGrid.innerHTML = productsToRender.map(product => `
         <div class="card" data-category="${product.category}">
           ${product.discount ? `<span class="card-badge">%${product.discount} İndirim</span>` : ''}
+          <button class="favorite-btn ${favorites.includes(product.id) ? 'active' : ''}" onclick="toggleFavorite(${product.id}, this)">
+            ${favorites.includes(product.id) ? '❤️' : '🤍'}
+          </button>
           <button class="quick-view-btn" onclick="openModal(${product.id})">Hızlı Bakış</button>
           <img src="${product.image}" 
                alt="${product.name}"
+               onerror="this.src='https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+          <div class="card-info">
+            <div class="card-title">${product.name}</div>
+            <div class="card-subtitle">${product.subtitle}</div>
+            <div class="card-price">
+              <span class="old-price">${product.oldPrice} ₺</span>
+              <span style="color: var(--gold-glow); font-size: 1.5rem;">${product.price} ₺</span>
+            </div>
+            <button class="add-to-cart" onclick="addToCart(${product.id}, this)">
+              <span>🛒</span>
+              <span>Sepete Ekle</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Toggle Favorite
+    function toggleFavorite(productId, btn) {
+      const index = favorites.indexOf(productId);
+      if (index === -1) {
+        favorites.push(productId);
+        btn.classList.add('active');
+        btn.innerHTML = '❤️';
+        showToast('Favorilere eklendi!');
+      } else {
+        favorites.splice(index, 1);
+        btn.classList.remove('active');
+        btn.innerHTML = '🤍';
+        showToast('Favorilerden çıkarıldı');
+      }
+      localStorage.setItem('essenceNoirFavorites', JSON.stringify(favorites));
+      updateFavoritesSection();
+    }
+
+    // Show Favorites Section
+    function showFavorites() {
+      const section = document.getElementById('favoritesSection');
+      const productsSection = document.getElementById('erkek');
+      
+      section.classList.add('show');
+      productsSection.style.display = 'none';
+      updateFavoritesSection();
+      
+      sidebar.classList.remove('open');
+      overlay.classList.remove('show');
+      
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Update Favorites Section
+    function updateFavoritesSection() {
+      const grid = document.getElementById('favoritesGrid');
+      const noFavorites = document.getElementById('noFavorites');
+      
+      if (favorites.length === 0) {
+        grid.innerHTML = '';
+        noFavorites.style.display = 'block';
+        return;
+      }
+      
+      noFavorites.style.display = 'none';
+      const favoriteProducts = products.filter(p => favorites.includes(p.id));
+      
+      grid.innerHTML = favoriteProducts.map(product => `
+        <div class="card" data-category="${product.category}">
+          ${product.discount ? `<span class="card-badge">%${product.discount} İndirim</span>` : ''}
+          <button class="favorite-btn active" onclick="toggleFavorite(${product.id}, this)">❤️</button>
+          <button class="quick-view-btn" onclick="openModal(${product.id})">Hızlı Bakış</button>
+          <img src="${product.image}" alt="${product.name}"
                onerror="this.src='https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
           <div class="card-info">
             <div class="card-title">${product.name}</div>
@@ -1037,7 +1726,6 @@
       updateCart();
       showToast(`${product.name} sepete eklendi!`);
       
-      // Button animation
       if (btnElement) {
         const originalText = btnElement.innerHTML;
         btnElement.classList.add('added');
@@ -1070,6 +1758,22 @@
       }
     }
 
+    // Apply Discount
+    function applyDiscount() {
+      const input = document.getElementById('discountInput');
+      const code = input.value.trim().toUpperCase();
+      
+      if (code === 'HOŞGELDİN20' || code === 'SEVGİLİ20') {
+        appliedDiscount = { code, amount: 20 };
+        localStorage.setItem('essenceNoirDiscount', JSON.stringify(appliedDiscount));
+        updateCart();
+        showToast('20 TL indirim uygulandı!');
+        input.value = '';
+      } else {
+        showToast('Geçersiz indirim kodu!');
+      }
+    }
+
     // Save Cart to LocalStorage
     function saveCart() {
       localStorage.setItem('essenceNoirCart', JSON.stringify(cart));
@@ -1078,7 +1782,24 @@
     // Update Cart UI
     function updateCart() {
       const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      
+      // Apply discount (sabit 20 TL)
+      let discountAmount = 0;
+      if (appliedDiscount) {
+        discountAmount = Math.min(appliedDiscount.amount, totalPrice); // Toplam fiyattan fazla olamaz
+        totalPrice -= discountAmount;
+      }
+      
+      // Update discount info
+      const discountInfo = document.getElementById('discountInfo');
+      const discountAmountEl = document.getElementById('discountAmount');
+      if (appliedDiscount && discountAmount > 0) {
+        discountInfo.style.display = 'flex';
+        discountAmountEl.textContent = `-${discountAmount} ₺ (${appliedDiscount.code})`;
+      } else {
+        discountInfo.style.display = 'none';
+      }
       
       // Update badge
       if (totalItems > 0) {
@@ -1126,22 +1847,32 @@
       if (cart.length === 0) return;
       
       const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      const message = generateWhatsAppMessage();
+      let finalTotal = total;
+      let discountAmount = 0;
+      if (appliedDiscount) {
+        discountAmount = Math.min(appliedDiscount.amount, total);
+        finalTotal = total - discountAmount;
+      }
+      
+      const message = generateWhatsAppMessage(finalTotal, discountAmount);
       const whatsappUrl = `https://wa.me/905434602675?text=${encodeURIComponent(message)}`;
       
       window.open(whatsappUrl, '_blank');
     }
 
     // Generate WhatsApp Message
-    function generateWhatsAppMessage() {
-      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    function generateWhatsAppMessage(finalTotal, discountAmount) {
       let message = `Merhaba Essence Noir! 👋\n\nSipariş vermek istiyorum:\n\n`;
       
       cart.forEach(item => {
         message += `• ${item.name} (${item.quantity} adet) - ${item.price * item.quantity} ₺\n`;
       });
       
-      message += `\nToplam: ${total} ₺\n\nTeşekkürler!`;
+      if (appliedDiscount && discountAmount > 0) {
+        message += `\nİndirim: ${appliedDiscount.code} (-${discountAmount} ₺)\n`;
+      }
+      
+      message += `\nToplam: ${finalTotal} ₺\n\nTeşekkürler!`;
       return message;
     }
 
@@ -1251,6 +1982,8 @@
     // Navigation
     document.querySelectorAll('.sidebar-nav a').forEach(link => {
       link.addEventListener('click', (e) => {
+        if (link.getAttribute('href') === '#favorites') return;
+        
         e.preventDefault();
         const targetId = link.getAttribute('href');
         
@@ -1259,6 +1992,10 @@
         
         sidebar.classList.remove('open');
         overlay.classList.remove('show');
+        
+        // Reset sections
+        document.getElementById('favoritesSection').classList.remove('show');
+        document.getElementById('erkek').style.display = 'block';
         
         if (targetId === '#home') {
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1274,6 +2011,7 @@
         sidebar.classList.remove('open');
         cartSidebar.classList.remove('open');
         productModal.classList.remove('show');
+        welcomeModal.classList.remove('show');
         overlay.classList.remove('show');
         document.body.style.overflow = '';
       }
@@ -1283,6 +2021,12 @@
     productModal.addEventListener('click', (e) => {
       if (e.target === productModal) {
         closeModalFunc();
+      }
+    });
+
+    welcomeModal.addEventListener('click', (e) => {
+      if (e.target === welcomeModal) {
+        closeWelcomeModal();
       }
     });
   </script>
